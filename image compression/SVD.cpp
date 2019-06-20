@@ -4,7 +4,7 @@
 
 int main() {
     cv::Mat img = cv::imread("nature.jpg",1);
-    int k = 270;
+    int k = 345;
     float R = (float)k*(1+(float)img.rows+(float)img.cols)/((float)img.rows*(float)img.cols);
     cv::Mat uu = cv::Mat::zeros(img.rows,k,CV_32FC1);
     cv::Mat ss = cv::Mat::zeros(k,k,CV_32FC1);
@@ -21,18 +21,21 @@ int main() {
 
     cv::Mat imgBlue, imgRed, imgGreen;
     std::vector<cv::Mat> channels;
-    cv::split(img, channels);//分離色彩通道
+    cv::split(img, channels);//split BGR
 	imgBlue = channels.at(0);
 	imgGreen = channels.at(1);
 	imgRed = channels.at(2);
     imgBlue.convertTo(imgBlue,CV_32FC1);
     imgGreen.convertTo(imgGreen,CV_32FC1);
     imgRed.convertTo(imgRed,CV_32FC1);
+    // the image store in usinged char, but SVD input is float or double.
     cv::Mat sBlue,uBlue,vtBlue;
     imgBlue.convertTo(blue, CV_32FC1);
-    std::cout<<"do SVD"<<std::endl;
+    //std::cout<<"do SVD"<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     cv::SVD::compute(imgBlue,sBlue,uBlue,vtBlue,4);
-    std::cout<<uBlue.size<<std::endl;
+    //std::cout<<uBlue.size<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     for (int i = 0;i < imgBlue.rows;i++)
     {
         if(i < k) ss.at<float>(i,i) = sBlue.at<float>(i);
@@ -47,9 +50,11 @@ int main() {
 
     cv::Mat uGreen,sGreen,vtGreen;
     imgGreen.convertTo(green, CV_32FC1);
-    std::cout<<"do SVD"<<std::endl;
+    //std::cout<<"do SVD"<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     cv::SVD::compute(imgGreen,sGreen,uGreen,vtGreen,4);
-    std::cout<<uGreen.size<<std::endl;
+    //std::cout<<uGreen.size<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     for (int i = 0;i < imgGreen.rows;i++)
     {
         if(i < k) ss.at<float>(i,i) = sGreen.at<float>(i);
@@ -63,9 +68,11 @@ int main() {
 
     cv::SVD::compute(imgGreen,sGreen,uGreen,vtGreen,4);
     cv::Mat uRed,sRed,vtRed;
-    std::cout<<"do SVD"<<std::endl;
+    //std::cout<<"do SVD"<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     cv::SVD::compute(imgRed,sRed,uRed,vtRed,4);
-    std::cout<<uRed.size<<std::endl;
+    //std::cout<<uRed.size<<std::endl;
+    //SVD needs much more time, this print just let you know it's computing......
     for (int i = 0;i < imgGreen.rows;i++)
     {
         if(i < k) ss.at<float>(i,i) = sRed.at<float>(i);
