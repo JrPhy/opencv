@@ -114,8 +114,8 @@ int main()
             else
                 cv::line( frame, cv::Point(x0,y0),cv::Point(x1,y1), cv::Scalar(255,0,0), 3, cv::LINE_AA, 0);
 
-            while(right.size() > 60) right.erase (right.begin(),right.begin()+40);
-            while(left.size() > 60) left.erase (left.begin(),left.begin()+40);
+            while(right.size() > 40) right.erase (right.begin(),right.begin()+32);
+            while(left.size() > 40) left.erase (left.begin(),left.begin()+32);
             //both while are for fitline, because I use push_back, the elements in the vector will increase, 
             //so I use it to fix their length.
         }
