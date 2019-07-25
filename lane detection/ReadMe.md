@@ -1,4 +1,6 @@
-try the video on the youtube
+In different situations, please tune the parameter by yourself.
+
+Try the video on the youtube as a example.
 
 https://www.youtube.com/watch?v=gwL1_LK2Obs
 
