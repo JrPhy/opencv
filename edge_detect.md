@@ -109,12 +109,48 @@ $$\begin{equation}
 \end{equation}$$
 
 ## 4. canny edge
-canny 找邊算法在 1968 年提出
-$$\begin{equation}
-f_{y} = 
-    \begin{bmatrix}
-        1&2&1 \\
-        0&0&0 \\
-        \-1&-2&-1 \\
-    \end{bmatrix}
-\end{equation}$$
+canny 找邊算法在 1968 年提出，在 sobel 的基礎上加上了 double threshold，最後再把相鄰的點連起來來避免假邊界。如果算完 sobel 的值大於較大的 threshold 則稱為強邊界，小於較小的 threshold 則非邊界，介於中間的則是弱邊界，也就是候選邊界而已，最後要看是否與強邊界相鄰。用 opencv 來實作如下
+```c++
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+using namespace cv;
+using namespace std;
+
+int main(int argc, char** argv) {
+    // 檢查是否有輸入圖片路徑
+    if (argc != 2) {
+        cout << "使用方式: " << argv[0] << " <圖片路徑>" << endl;
+        return -1;
+    }
+
+    // 讀取圖片
+    Mat src = imread(argv[1], IMREAD_COLOR);
+    if (src.empty()) {
+        cout << "無法讀取圖片: " << argv[1] << endl;
+        return -1;
+    }
+
+    // 轉成灰階
+    Mat gray;
+    cvtColor(src, gray, COLOR_BGR2GRAY);
+
+    // 套用高斯模糊，降低雜訊
+    Mat blurred;
+    GaussianBlur(gray, blurred, Size(5, 5), 1.4);
+
+    // Canny 邊緣檢測
+    Mat edges;
+    double lowThreshold = 50;
+    double highThreshold = 150;
+    Canny(blurred, edges, lowThreshold, highThreshold);
+
+    // 顯示結果
+    imshow("原始圖片", src);
+    imshow("Canny 邊緣檢測", edges);
+
+    waitKey(0);
+    return 0;
+}
+```
+[這篇文章](https://github.com/lina-haidar/Edge-Detection-Techniques-Sobel-vs.-Canny?tab=readme-ov-file#sobel-vs-canny)可以看到使用 canny 找出來的邊比只用 sobel 找出來的清晰且明顯許多。
