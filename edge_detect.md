@@ -17,7 +17,9 @@ $$\ f'(x) = \dfrac{df(x)}{dx} \sim \dfrac{ \Delta f(x)}{ \Delta x} = \dfrac{f(x_
 
 ## 2. 二維差分
 二維就是一維做兩次，最後再利用畢氏定理算出中心值即可。
+
 $$\ \nabla f(x, y) = \dfrac{\partial f(x, y)}{\partial x}\hat{x} + \dfrac{\partial f(x, y)}{\partial y}\hat{y} = f_{x}(x, y)\hat{x} + f_{y}(x, y)\hat{y} \rightarrow |\nabla f(x, y)| = \sqrt(f_{x}^{2} + f_{y}^{2})$$
+
 所以就可以寫成一個 3*3 的矩陣
 
 $$\begin{equation}
