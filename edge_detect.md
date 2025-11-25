@@ -155,4 +155,4 @@ int main(int argc, char** argv) {
     return 0;
 }
 ```
-[這篇文章](https://github.com/lina-haidar/Edge-Detection-Techniques-Sobel-vs.-Canny?tab=readme-ov-file#sobel-vs-canny)可以看到使用 canny 找出來的邊比只用 sobel 找出來的清晰且明顯許多。
+[這篇文章](https://github.com/lina-haidar/Edge-Detection-Techniques-Sobel-vs.-Canny?tab=readme-ov-file#sobel-vs-canny)可以看到使用 canny 找出來的邊比只用 sobel 找出來的清晰且明顯許多。找出邊後就可以利用這些邊去找出開放或是封閉曲線，開放曲線可以用在車道辨識，封閉曲線可以用在瑕疵檢測。
