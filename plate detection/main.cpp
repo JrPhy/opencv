@@ -4,8 +4,7 @@
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\opencv.hpp>
 
-bool verifySizes(cv::RotatedRect mr)
-{
+bool verifySizes(cv::RotatedRect mr) {
     float error = 0.9;
     //Spain car plate size: 52x11 aspect 4,7272
     //China car plate size: 440mm*140mm¡Aaspect 3.142857
@@ -21,23 +20,12 @@ bool verifySizes(cv::RotatedRect mr)
 
     int area= mr.size.height * mr.size.width;
     float r = (float)mr.size.width / (float)mr.size.height;
-    if(r < 1)
-    {
-        r= (float)mr.size.height / (float)mr.size.width;
-    }
-
-    if(( area < min || area > max ) || ( r < rmin || r > rmax ))
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    if(r < 1) r = (float)mr.size.height / (float)mr.size.width;
+    if(( area < min || area > max ) || ( r < rmin || r > rmax )) return false;
+    else return true;
 }
 
-cv::Mat showResultMat(cv::Mat src, cv::Size rect_size, cv::Point2f center, int index)
-{
+cv::Mat showResultMat(cv::Mat src, cv::Size rect_size, cv::Point2f center, int index) {
     cv::Mat img_crop;
     getRectSubPix(src, rect_size, center, img_crop);
 
@@ -45,12 +33,10 @@ cv::Mat showResultMat(cv::Mat src, cv::Size rect_size, cv::Point2f center, int i
     resultResized.create(36, 136, CV_8UC3);
     cv::resize(img_crop, resultResized, resultResized.size(), 0, 0, cv::INTER_CUBIC);
 
-
     return resultResized;
 }
 
-int main()
-{
+int main() {
     cv::Mat img, gray, dst, roi, sobelX, sobelY, result, resultMat, img_rotated, rotmat;
     std::vector<cv::Vec4i> hierarchy;
     std::vector< std::vector<cv::Point>> contours;
@@ -73,18 +59,13 @@ int main()
     std::vector<cv::RotatedRect> rects;
     //Remove patch that are no inside limits of aspect ratio and area.
     int t = 0;
-    while (itc != contours.end())
-    {
+    while (itc != contours.end()) {
         //Create bounding rect of object
         cv::RotatedRect mr = cv::minAreaRect(cv::Mat(*itc));
 
         //large the rect for more
-        if( !verifySizes(mr))
-        {
-            itc = contours.erase(itc);
-        }
-        else
-        {
+        if(!verifySizes(mr)) itc = contours.erase(itc);
+        else {
             ++itc;
             rects.push_back(mr);
         }
@@ -92,13 +73,10 @@ int main()
 
     int k = 1, m_debug = 0, m_angle= 20;
     std::vector<cv::Mat> resultVec;
-    for(int i=0; i< rects.size(); i++)
-    {
+    for(int i=0; i< rects.size(); i++) {
         cv::RotatedRect minRect = rects[i];
-        if(verifySizes(minRect))
-        {
-            if(m_debug)
-            {
+        if(verifySizes(minRect)) {
+            if(m_debug) {
                 cv::Point2f rect_points[4];
                 minRect.points( rect_points );
                 for( int j = 0; j < 4; j++ )
@@ -108,13 +86,11 @@ int main()
             float r = (float)minRect.size.width / (float)minRect.size.height;
             float angle = minRect.angle;
             cv::Size rect_size = minRect.size;
-            if (r < 1)
-            {
+            if (r < 1) {
                 angle = 90 + angle;
                 std::swap(rect_size.width, rect_size.height);
             }
-            if (angle - m_angle < 0 && angle + m_angle > 0)
-            {
+            if (angle - m_angle < 0 && angle + m_angle > 0) {
                 //Create and rotate image
                 rotmat = getRotationMatrix2D(minRect.center, angle, 1);
                 cv::warpAffine(img, img_rotated, rotmat, img.size(), cv::INTER_CUBIC);
@@ -126,10 +102,8 @@ int main()
         }
     }
 
-
     cv::drawContours(img, contours, -1, cv::Scalar(0,255,255), 1);
     cv::imshow("Sobel", resultVec.at(0));
-
 
     cv::waitKey(0);
     return 0;
