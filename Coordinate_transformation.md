@@ -13,7 +13,7 @@ $$\begin{equation}
     \end{bmatrix}
     =
     \begin{bmatrix}
-    M
+    M \\
     \end{bmatrix}
     \begin{bmatrix}
         x \\
@@ -32,7 +32,8 @@ $$\begin{equation}
         1 \\
     \end{bmatrix}
 \end{equation}$$
-寫成三圍是等等比較好跟 O -> C 的矩陣計算。O -> C 之間就多了一個維度而已，不過其放大率就跟焦長有關，可以利用相似三角形得到關係如圖二所示
+
+寫成三維是等等比較好跟 O -> C 的矩陣計算。O -> C 之間就多了一個維度而已，不過其放大率就跟焦長有關，可以利用相似三角形得到關係如圖二所示
 
 ![圖二：成像關係](img/focus_mag.jpg)
 
