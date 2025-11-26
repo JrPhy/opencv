@@ -156,6 +156,42 @@ $$\begin{equation}
 
 解決此問題有兩種方法，四元數與 Rodrigues 旋轉。電腦視覺中常用四元數(Quaternion)來做旋轉，因為要做連續旋轉或插植很方便。而在電腦圖學中我們僅需做一次旋轉，所以 openCV 中也用此方法。
 
+## Rodrigues 旋轉
+對一個向量 $\ \vec{V} $在直角坐標中以 k 為轉軸旋轉 $\ \theta $角後的向量為 $\ \vec{V'} $，兩者關係為
+
+$$\ \vec{V}' = \vec{V}cos\theta + \hat{k}\times\vec{V}sin\theta+\hat{k}(\hat{k}\cdot\vec{V})(1-cos\theta) $$
+
+其中 $\ \hat{k} $為單位向量。對於 $\ \vec{V} $而言可以拆解成平行 $\ \vec{V}_ {\parallel} $和垂直 $\ \vec{V}_{\perp} $轉軸的兩個分量，其中
+
+$$\ \vec{V}_ {\parallel} = \vec{V}\cdot\hat{k}， \vec{V}_ {\perp} = \vec{V} - \vec{V}_ {\parallel} = \vec{V} - \vec{V}\cdot\hat{k}$$
+
+$$\ \vec{V}' = \vec{V}'_ {\parallel} + \vec{V}'_ {\perp}， \vec{V}'_ {\perp} = \vec{V}_ {\perp}cos\theta + \vec{w}sin\theta， \vec{w} = \hat{k}\times\vec{V}_ {\perp} = \hat{k}\times(\vec{V} - \vec{V}_{\parallel}) = \hat{k}\times\vec{V}$$
+
+$\ \vec{V}' = \vec{V}'_ {\parallel} + \vec{V}'_ {\perp} = \vec{V}'_ {\parallel} + \vec{V}_ {\perp}cos\theta + \hat{k}\times\vec{V}sin\theta$
+
+$\ = \vec{V}'_ {\parallel} + (\vec{V} - \vec{V}_{\parallel})cos\theta + \hat{k}\times\vec{V}sin\theta$
+
+$\ = \vec{V}cos\theta + \hat{k}\times\vec{V}sin\theta + \hat{k}(\hat{k}\cdot\vec{V})(1-cos\theta)$
+
+$\ \hat{k} = [k_{x} k_{y} k_{y}]^T, vec{V} = [V_{x} V_{y} V_{y}]^T$
+
+$\ \hat{k}\times\vec{V} = [(\hat{k}\times\vec{V})_ {x}, (\hat{k}\times\vec{V})_ {y}, (\hat{k}\times\vec{V})_ {z}]^T$
+
+$\ = [(\hat{k}_ {y}\times\vec{V}_ {z} - \hat{k}_ {z}\times\vec{V}_ {y}), (\hat{k}_ {z}\times\vec{V}_ {x} - \hat{k}_ {x}\times\vec{V}_ {z}), (\hat{k}_ {x}\times\vec{V}_ {y} - \hat{k}_ {y}\times\vec{V}_ {z})]^T$
+
+$$\begin{equation}
+    = \\
+    \begin{bmatrix}
+        0&-k_{z}&k_{y} \\
+        k_{z}&0&-k_{x} \\
+        -k_{y}&-k_{x}&0 \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        V_{x} \\
+        V_{y} \\
+        V_{z} \\
+    \end{bmatrix}
+\end{equation}$$
 ## 4. 物體座標到像素座標
 從前面推導可知其轉換關係為 $\ g = M_{1}M_{2}O $。 $\ M_{1} $為 3x3 矩陣是內部參數， $\ M_{2} $為 4x4 矩陣是外部參數，故至少要有四個方程式才能唯一決定一平面，所以至少要四張圖，而實務上會多拍幾張，並用最小平方法來找出最小誤差的解。
 
